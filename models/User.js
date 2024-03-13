@@ -18,8 +18,8 @@ const userSchema = new Schema(
       // email validator
       match: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
     },
-    thoughts: [{ type: ObjectId, ref: "thought" }],
-    friends: [{ type: ObjectId, ref: "user" }],
+    thoughts: [{ type: Schema.Types.ObjectId, ref: "thought" }],
+    friends: [{ type: Schema.Types.ObjectId, ref: "user" }],
   },
   {
     toJSON: {
