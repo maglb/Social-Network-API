@@ -28,12 +28,6 @@ module.exports = {
   async getUsers(req, res) {
     try {
       const users = await User.find();
-
-      //   const studentObj = {
-      //     students,
-      //     headCount: await headCount(),
-      //   };
-
       res.json(users);
     } catch (err) {
       console.log(err);
@@ -144,7 +138,7 @@ module.exports = {
       res.status(500).json(err);
     }
   },
-  // Remove friend from a studuserent
+  // Remove friend from a user
   async deleteFriend(req, res) {
     try {
       const user = await User.findOneAndUpdate(
