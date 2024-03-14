@@ -96,7 +96,7 @@ module.exports = {
   //update user
   async updateUser(req, res) {
     try {
-      const video = await User.findOneAndUpdate(
+      const user = await User.findOneAndUpdate(
         { _id: req.params.userId },
         { $set: req.body },
         { runValidators: true, new: true }
@@ -108,7 +108,7 @@ module.exports = {
           .json({ message: "No user was found with this id!" });
       }
 
-      res.json(user);
+      res.json({ message: "User successfully updated" });
     } catch (err) {
       console.log(err);
       res.status(500).json(err);
