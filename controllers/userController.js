@@ -27,7 +27,7 @@ module.exports = {
   // Get all user
   async getUsers(req, res) {
     try {
-      const users = await User.find();
+      const users = await User.find().populate("friends").populate("thoughts");
       res.json(users);
     } catch (err) {
       console.log(err);
@@ -39,7 +39,9 @@ module.exports = {
     try {
       const user = await User.findOne({
         _id: req.params.userId,
-      }).populate({ path: "friends", select: "-__v" });
+      })
+        .populate("friends")
+        .populate("thoughts");
 
       if (!user) {
         return res
