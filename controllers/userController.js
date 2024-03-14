@@ -39,10 +39,7 @@ module.exports = {
     try {
       const user = await User.findOne({
         _id: req.params.userId,
-      })
-        .populate("friends")
-        .populate("thoughts")
-        .select("-__v");
+      }).populate({ path: "friends", select: "-__v" });
 
       if (!user) {
         return res
@@ -70,7 +67,7 @@ module.exports = {
   // Delete a user and remove them from the course
   async deleteUser(req, res) {
     try {
-      const user = await User.findOneAndRemove({
+      const user = await User.findOneAndDelete({
         _id: req.params.userId,
       });
 
