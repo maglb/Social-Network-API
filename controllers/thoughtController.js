@@ -28,11 +28,24 @@ module.exports = {
       res.status(500).json(err);
     }
   },
-  // Create a course
+  // Create a thought
   async createThought(req, res) {
     try {
       const thought = await Thought.create(req.body);
-      res.json(thought);
+ const user = await User.findOneAndUpdate(
+        { _id: req.body.userId },
+        { $addToSet: { thoughts: thought._id } },
+        { new: true }
+      );
+
+      if (!user) {
+        return res
+          .status(404)
+          .json({ message: 'Thought created, but no user was found with that ID' });
+      }
+
+      res.json('Thought has been created 🎉');
+
     } catch (err) {
       console.log(err);
       return res.status(500).json(err);
