@@ -1,4 +1,4 @@
-const { User, Reaction, Thought } = require("../models");
+const { User, reactionSchema, Thought } = require("../models");
 
 module.exports = {
   // Get all thoughts
@@ -32,20 +32,19 @@ module.exports = {
   async createThought(req, res) {
     try {
       const thought = await Thought.create(req.body);
- const user = await User.findOneAndUpdate(
+      const user = await User.findOneAndUpdate(
         { _id: req.body.userId },
         { $addToSet: { thoughts: thought._id } },
         { new: true }
       );
 
       if (!user) {
-        return res
-          .status(404)
-          .json({ message: 'Thought created, but no user was found with that ID' });
+        return res.status(404).json({
+          message: "Thought created, but no user was found with that ID",
+        });
       }
 
-      res.json('Thought has been created 🎉');
-
+      res.json("Thought has been created 🎉");
     } catch (err) {
       console.log(err);
       return res.status(500).json(err);
@@ -82,6 +81,43 @@ module.exports = {
       }
 
       res.json({ message: "Thought successfully updated" });
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
+  // Create a reaction
+  async createReaction(req, res) {
+    try {
+      // const reaction = await reactionSchema.create(req.body);
+      const thought = await Thought.findOneAndUpdate(
+        { _id: req.body.thoughtId },
+        { $addToSet: { reaction: req.body } },
+        { new: true }
+      );
+
+      if (!thought) {
+        return res.status(404).json({
+          message: "No thought was found with that ID",
+        });
+      }
+
+      res.json("Reaction has been created 🎉");
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json(err);
+    }
+  },
+  // Delete a reaction
+  async deleteReaction(req, res) {
+    try {
+      const reaction = await reactionSchema.findOneAndDelete({
+        _id: req.params.reactionId,
+      });
+
+      if (!reaction) {
+        res.status(404).json({ message: "No reaction was found with this id!" });
+      }
+      res.json({ message: "Reaction successfully deleted" });
     } catch (err) {
       res.status(500).json(err);
     }
