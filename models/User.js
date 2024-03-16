@@ -28,7 +28,7 @@ const userSchema = new Schema(
     id: false,
   }
 );
-// IT IS NOT SHOWING AFTER A GET RQUESR
+
 // Create a virtual property `friendCount` that gets the amount of friends the user has
 userSchema.virtual("friendCount").get(function () {
   return this.friends.length;
