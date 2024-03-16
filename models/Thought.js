@@ -1,5 +1,6 @@
 const { Schema, model } = require("mongoose");
 const reactionSchema = require("./Reaction");
+const dayjs = require("dayjs");
 
 // Schema to create thought model
 const thoughtSchema = new Schema(
@@ -13,8 +14,7 @@ const thoughtSchema = new Schema(
     createdAt: {
       type: Date,
       default: Date.now,
-      // add getter to format the timestamp on query look more into LocaleString and LocaleDateString
-      get: (value) => new Date(value).toLocaleString(),
+      get: (createdAt) => dayjs(createdAt).format("MMM D, YYYY h:mm A")
     },
     username: {
       type: String,

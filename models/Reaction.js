@@ -1,5 +1,6 @@
 const { ObjectId } = require("mongodb");
 const { Schema, model } = require("mongoose");
+const dayjs = require("dayjs");
 
 // Schema to create reaction model
 const reactionSchema = new Schema(
@@ -20,7 +21,7 @@ const reactionSchema = new Schema(
     createdAt: {
       type: Date,
       default: Date.now,
-      // add getter to format the timestamp on query
+      get: (createdAt) => dayjs(createdAt).format("MMM D, YYYY at h:mm A")
     },
   },
   {
