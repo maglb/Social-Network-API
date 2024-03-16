@@ -4,18 +4,18 @@ module.exports = {
   // Get all thoughts
   async getThoughts(req, res) {
     try {
-      const thoughts = await Thought.find().populate("reactions");
+      const thoughts = await Thought.find().select('-__v');
       res.json(thoughts);
     } catch (err) {
       res.status(500).json(err);
     }
   },
-  // Get a course
+  // Get a single thought
   async getSingleThought(req, res) {
     try {
       const thought = await Thought.findOne({
         _id: req.params.thoughtId,
-      }).populate("reactions");
+      });
 
       if (!thought) {
         return res
@@ -25,6 +25,7 @@ module.exports = {
 
       res.json(thought);
     } catch (err) {
+      console.error(err);
       res.status(500).json(err);
     }
   },
@@ -61,7 +62,6 @@ module.exports = {
         res.status(404).json({ message: "No thought was found with this id!" });
       }
 
-      // await Student.deleteMany({ _id: { $in: course.students } });
       res.json({ message: "Thought successfully deleted" });
     } catch (err) {
       res.status(500).json(err);
@@ -88,10 +88,10 @@ module.exports = {
   // Create a reaction
   async createReaction(req, res) {
     try {
-      // const reaction = await reactionSchema.create(req.body);
+
       const thought = await Thought.findOneAndUpdate(
-        { _id: req.body.thoughtId },
-        { $addToSet: { reaction: req.body } },
+        { _id: req.params.thoughtId },
+        { $addToSet: { reactions: req.body } },
         { new: true }
       );
 
@@ -110,9 +110,10 @@ module.exports = {
   // Delete a reaction
   async deleteReaction(req, res) {
     try {
-      const reaction = await reactionSchema.findOneAndDelete({
-        _id: req.params.reactionId,
-      });
+      const reaction = await reactionSchema.findOneAndDelete(
+        { _id: req.params.reactionId },
+        { $pull: { reactions: { reactionId: req.params.reactionId } } }
+      );
 
       if (!reaction) {
         res.status(404).json({ message: "No reaction was found with this id!" });
