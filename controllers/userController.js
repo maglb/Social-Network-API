@@ -2,7 +2,7 @@ const { ObjectId } = require("mongoose").Types;
 const { User } = require("../models");
 
 module.exports = {
-  // Get all user
+  // Get all users
   async getUsers(req, res) {
     try {
       const users = await User.find()
@@ -48,7 +48,7 @@ module.exports = {
       res.status(500).json(err);
     }
   },
-  // Delete a user and remove them from the course
+  // Delete a user 
   async deleteUser(req, res) {
     try {
       const user = await User.findOneAndDelete({
