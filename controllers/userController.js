@@ -89,8 +89,6 @@ module.exports = {
 
   // Add a friend to a user
   async addFriend(req, res) {
-    console.log("A new friend has been added to your friend's list");
-    console.log(req.body);
 
     try {
       const friend = await User.findOne({
@@ -115,7 +113,9 @@ module.exports = {
           .json({ message: "No user found with that ID :(" });
       }
 
-      res.json(user);
+      res.json({
+        message: "A new friend has been added to your friend's list",
+      });
     } catch (err) {
       res.status(500).json(err);
     }
